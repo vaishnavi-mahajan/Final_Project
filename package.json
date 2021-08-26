@@ -1,0 +1,26 @@
+{
+  "name": "new-neo4j",
+  "version": "1.0.0",
+  "description": "connectivity to Neo4j graphical database from browser.",
+  "main": "index.js",
+  "scripts": {
+    "build": "browserify ./js/app.js -p esmify > ./dist/build.js && browserify ./js/dashboard.js -p esmify > ./dist/build-dashboard.js && browserify ./js/login.js -p esmify > ./dist/build-login.js",
+    "dev": "nodemon --exec \"yarn build && serve\" --watch ./js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "bcryptjs": "^2.4.3",
+    "browserify": "^17.0.0",
+    "chart.js": "^2.4.0",
+    "esmify": "^2.1.1",
+    "moment": "^2.29.1",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7",
+    "serve": "^11.3.2"
+  }
+}

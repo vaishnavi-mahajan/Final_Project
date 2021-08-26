@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="./css/bootstrap-colorpicker.min.css" />
+    <link href="./css/app.css" rel="stylesheet" />
+    <link href="./css/dashboard.css" rel="stylesheet" />
+    <link href="./css/circle.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+  
+
+
+</head>
+
+<body style="background-color : #fafbfe;">
+
+    <nav class="navbar navbar-expand-sm fixed-top navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Graph</a>
+        
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link active" href="./dashboard.html">Dashboard <span
+                        class="sr-only">(current)</span></a>
+                <a class="nav-item nav-link active"  href="./tree.html">Tree</a>
+               
+            </div>
+        </div>
+
+       
+
+        <div class="navbar-text">
+            <i class="fa fa-user-circle" aria-hidden="true"></i> 
+          <b>  <span id="user-name"></span> </b> (<span id="user-role"></span>)
+            <a href="#" id="lnk-logout" class="btn btn-link">Logout</a>
+        </div>
+
+          
+    </nav>
+
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-2 p-0">
+                <!-- Sidebar -->
+                <nav id="sidebar">
+
+                    <ul class="list-unstyled components">
+
+
+                        <li>
+                            <a href="#" id="sidebar-summary"><i class="fa fa-home"></i> Summary</a>
+                        </li>
+
+                        <li>
+                            <a href="#" id="sidebar-planning-item"> <i class="fa fa-bar-chart"></i> Planning Item</a>
+                        </li>
+
+                    </ul>
+                </nav>
+
+            </div>
+            <div class="col-sm-10">
+                <section id="section-summary">
+                  <div class="row mt-4">
+                    <div class="col-sm">
+                      <h5>Summary</h5>
+                    </div>
+                    <div class="row mt-7">
+                        <div class="col-sm">
+                    <div id="google_translate_element"></div>
+                    <script>
+                        function googleTranslateElementInit() {
+                            new google.translate.TranslateElement(
+                                {pageLanguage: 'en'},
+                                'google_translate_element'
+                            );
+                        }
+                    </script>
+                    <script src="http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+                        </div>
+                    </div>
+
+                  </div>
+                    <div id="div-summary" class="row mt-4">
+                        <div class="col-sm-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Task Phase</h5>
+                                    <canvas id="canvas-taskphase"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-5">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Task Status</h5>
+                                    <canvas id="canvas-taskstatus"></canvas>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Active Users</h5>
+                                    <div class="row border-bottom font-weight-bold p-2">
+                                        <div class="col-sm">User Id</div>
+                                        <div class="col-sm">Role</div>
+                                    </div>
+                                    <div id="user-list">
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-sm-8">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Audit Trail</h5>
+                                    
+                                    <table id="table-audit-trail" class="display">
+                                        <thead>
+                                            <tr>
+                                              <th>User Id</th>
+                                              <th>Action</th>
+                                              <th>Node</th>
+                                              <th>Timestamp</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                          
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </section>
+
+
+                <section id="section-planning-item" style="display: none;">
+                    <div id="div-planning-item" class="mt-4">
+
+                        <div class="row">
+                            <div class="col-sm">
+                                <div class="form-group">
+                                    <label class="h5">Planning Item</label>
+                                    <select class="form-select form-select-lg" id="selectPlanningItem">
+                                        <option selected>Select a planning item</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                        </div>
+
+                        <section id="section-planning-content" style="display: none;">
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <div class="card">
+                                        <div class="card-body text-center" id="card-body-planning">
+                                            <p class="card-title">Planning</p>
+    
+                                            <div class="c100 p100 center">
+                                                <span></span>
+                                                <div class="slice">
+                                                    <div class="bar"></div>
+                                                    <div class="fill"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="card">
+                                        <div class="card-body text-center" id="card-body-requirements">
+                                            <p class="card-title">Requirement Analysis</p>
+    
+                                            <div class="c100 p100 center">
+                                                <span></span>
+                                                <div class="slice">
+                                                    <div class="bar"></div>
+                                                    <div class="fill"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="card">
+                                        <div class="card-body text-center" id="card-body-design">
+                                            <p class="card-title">Design</p>
+    
+                                            <div class="c100 p100 center">
+                                                <span></span>
+                                                <div class="slice">
+                                                    <div class="bar"></div>
+                                                    <div class="fill"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="card">
+                                        <div class="card-body text-center" id="card-body-development">
+                                            <p class="card-title">Development</p>
+    
+                                            <div class="c100 p100 center">
+                                                <span></span>
+                                                <div class="slice">
+                                                    <div class="bar"></div>
+                                                    <div class="fill"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="card">
+                                        <div class="card-body text-center" id="card-body-testing">
+                                            <p class="card-title">Testing</p>
+    
+                                            <div class="c100 p100 center">
+                                                <span></span>
+                                                <div class="slice">
+                                                    <div class="bar"></div>
+                                                    <div class="fill"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                </div>
+
+                                
+                            </div>
+
+                            <div class="row mt-4">
+                                <div class="col-sm-2">
+                                    <div class="card">
+                                        <div class="card-body text-center" id="card-body-integration">
+                                            <p class="card-title">Integration</p>
+    
+                                            <div class="c100 p100 center">
+                                                <span></span>
+                                                <div class="slice">
+                                                    <div class="bar"></div>
+                                                    <div class="fill"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="card">
+                                        <div class="card-body text-center" id="card-body-operation">
+                                            <p class="card-title">Operations</p>
+    
+                                            <div class="c100 p100 center">
+                                                <span></span>
+                                                <div class="slice">
+                                                    <div class="bar"></div>
+                                                    <div class="fill"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="card">
+                                        <div class="card-body text-center" id="card-body-not-deployed">
+                                            <p class="card-title">Not Deployed</p>
+    
+                                            <div class="c100 p100 center">
+                                                <span></span>
+                                                <div class="slice">
+                                                    <div class="bar"></div>
+                                                    <div class="fill"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="card">
+                                        <div class="card-body text-center" id="card-body-deployed">
+                                            <p class="card-title">Deployed</p>
+    
+                                            <div class="c100 p100 center">
+                                                <span></span>
+                                                <div class="slice">
+                                                    <div class="bar"></div>
+                                                    <div class="fill"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                </div>
+                                
+                                <div class="col-sm-2">
+                                    <div class="card go-live h-100">
+                                        <div class="card-body text-center" id="card-body-go-live">
+                                            <p class="card-title">Projected Launch Date</p>
+
+                                            <div class="text-center">
+                                                <i class="fa fa-calendar-check-o fa-4x" aria-hidden="true"></i>
+
+                                                <p id="projected-launch" class="h5 mt-2">Sunday</p>
+                                            </div>
+    
+                                           
+                                        </div>
+                                    </div>
+    
+                                </div>
+
+                                
+                            </div>
+    
+    
+                            <div class="row mt-4">
+                                <div class="col-sm-4">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <p class="card-title  h5">Project Budget</p>
+                                            <canvas id="canvas-project-budget"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+    
+                                <div class="col-sm-6">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <p class="card-title  h5">Project Details</p>
+    
+                                            <div class="details-wrapper">
+    
+                                                <div class="row mt-3">
+                                                    <div class="col-sm-3">
+                                                        Planning Item Parent
+                                                    </div>
+                                                    <div class="col-sm-1">
+                                                        :
+                                                    </div>
+                                                    <div id="row-planning-item-parent" class="col-sm-8">
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-3">
+                                                    <div class="col-sm-3">
+                                                        Planning Item Name
+                                                    </div>
+                                                    <div class="col-sm-1">
+                                                        :
+                                                    </div>
+                                                    <div id="row-planning-item" class="col-sm-8">
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-3">
+                                                    <div class="col-sm-3">
+                                                        Planning Item ID
+                                                    </div>
+                                                    <div class="col-sm-1">
+                                                        :
+                                                    </div>
+                                                    <div id="row-planning-item-id" class="col-sm-8">
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-3">
+                                                    <div class="col-sm-3">
+                                                        Heirarchy Definition ID
+                                                    </div>
+                                                    <div class="col-sm-1">
+                                                        :
+                                                    </div>
+                                                    <div id="row-heirarchy-definition-id" class="col-sm-8">
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-3">
+                                                    <div class="col-sm-3">
+                                                        Heirarchy Definition Node
+                                                    </div>
+                                                    <div class="col-sm-1">
+                                                        :
+                                                    </div>
+                                                    <div id="row-heirarchy-definition-node" class="col-sm-8">
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-3">
+                                                    <div class="col-sm-3">
+                                                        Team Size
+                                                    </div>
+                                                    <div class="col-sm-1">
+                                                        :
+                                                    </div>
+                                                    <div id="row-team-size" class="col-sm-8">
+                                                    </div>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <div class="col-sm-3">
+                                                        Plan Start Date
+                                                    </div>
+                                                    <div class="col-sm-1">
+                                                        :
+                                                    </div>
+                                                    <div id="row-start-date" class="col-sm-8">
+                                                    </div>
+                                                </div>
+    
+                                            </div>
+    
+                                        </div>
+                                    </div>
+                                </div>
+    
+                            </div>
+    
+                            <div class="row mt-4">
+                                <div class="col-sm-4">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <p class="card-title  h5">All Budget</p>
+                                            <canvas id="canvas-all-budget"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+    
+                                <div class="col-sm-6">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <p class="card-title h5">Planning Items</p>
+    
+                                            <div class="details-wrapper">
+    
+                                                <div class="row mt-3">
+                                                    <div class="col-sm-3">
+                                                        Planning Item Parent
+                                                    </div>
+                                                    <div class="col-sm-1">
+                                                        :
+                                                    </div>
+                                                    <div id="planning-item-parent-name" class="col-sm-8">
+                                                    </div>
+                                                </div>
+                                                <!-- <div class="row mt-3">
+                                                    <div class="col-sm-3">
+                                                        Planning Item Name
+                                                    </div>
+                                                    <div class="col-sm-1">
+                                                        :
+                                                    </div>
+                                                    <div id="planning-items" class="col-sm-8">
+                                                    </div>
+                                                </div> -->
+
+                                                <div class="row mt-3">
+                                                    <div class="col-sm">
+                                                        <table id="table-parent-item" class="display">
+                                                            <thead>
+                                                                <tr>
+                                                                  <th>Planning Item Name</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                              
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    
+                                                </div>
+
+                                            </div>
+    
+    
+    
+                                        </div>
+                                    </div>
+                                </div>
+    
+                            </div>
+
+                        </section>
+
+                       
+
+                    </div>
+
+                </section>
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+</body>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"
+    integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF"
+    crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+<script src="./dist/build-dashboard.js"></script>
+
+</html>

@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neo4js</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+    integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="./css/bootstrap-colorpicker.min.css" />
+  <link href="./css/app.css" rel="stylesheet" />
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-sm fixed-top navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Graph</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-item nav-link" href="./dashboard.html">Dashboard <span class="sr-only">(current)</span></a>
+        <a class="nav-item nav-link active" href="./tree.html">Tree</a>
+      </div>
+    </div>
+    <div class="navbar-text" >
+      <i class="fa fa-user-circle" aria-hidden="true"></i>
+      <b> <span id="user-name"></span> </b> (<span id="user-role"></span>)
+      <a href="#" id="lnk-logout" class="btn btn-link">Logout</a>
+    </div>
+  </nav>
+
+  
+ 
+
+  <div id="alert-modal" class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Succesful!</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Properties updated successfully!
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="add-modal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog"
+    aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add Node</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <form>
+            <div class="form-group row">
+              <label for="txt_add_Planning_Item_Parent_Name"
+                class="col-sm-4 col-form-label col-form-label-sm">Planning_Item_Parent_Name</label>
+              <div class="col-sm-6">
+                <select class="form-control form-control-sm" id="txt_add_Planning_Item_Parent_Name">
+                  <option value="0" selected>Select a planning item Parent</option>
+                </select>
+              </div>
+
+
+            </div>
+
+            <div class="form-group row">
+              <label for="txt_add_name" class="col-sm-4 col-form-label col-form-label-sm">Name</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-sm" id="txt_add_name">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="txt_add_Rolledup_Budget" class="col-sm-4 col-form-label col-form-label-sm">Rolledup_Budget</label>
+              <div class="col-sm-6">
+                <input type="email" class="form-control form-control-sm" id="txt_add_Rolledup_Budget">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="txt_add_Planning_Item_Owner_User_Name"
+                class="col-sm-4 col-form-label col-form-label-sm">Planning_Item_Owner_User_Name</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-sm" id="txt_add_Planning_Item_Owner_User_Name">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="txt_add_Allocated_Budget_Currency"
+                class="col-sm-4 col-form-label col-form-label-sm">Allocated_Budget_Currency</label>
+              <div class="col-sm-6">
+                
+                <select class="form-control form-control-sm" id="txt_add_Allocated_Budget_Currency">
+                  <option value="USD" selected>USD</option>
+                  <option value="INR" selected>INR</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="txt_add_Planning_Level_Type"
+                class="col-sm-4 col-form-label col-form-label-sm">Planning_Level_Type</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-sm" id="txt_add_Planning_Level_Type">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="txt_add_Planning_Item_ID"
+                class="col-sm-4 col-form-label col-form-label-sm">Planning_Item_ID</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-sm" id="txt_add_Planning_Item_ID" disabled>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="txt_add_Planning_Item_Name"
+                class="col-sm-4 col-form-label col-form-label-sm">Planning_Item_Name</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-sm" id="txt_add_Planning_Item_Name">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="txt_add_Planning_Item_Created_By_User_Name"
+                class="col-sm-4 col-form-label col-form-label-sm">Planning_Item_Created_By_User_Name</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-sm" id="txt_add_Planning_Item_Created_By_User_Name" disabled>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="txt_add_Level_3_Planning_Item_Name"
+                class="col-sm-4 col-form-label col-form-label-sm">Level_3_Planning_Item_Name</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-sm" id="txt_add_Level_3_Planning_Item_Name">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="txt_add_Team_Size" class="col-sm-4 col-form-label col-form-label-sm">Team_Size</label>
+              <div class="col-sm-6">
+                <input type="number" class="form-control form-control-sm" id="txt_add_Team_Size">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="txt_add_Level_4_Planning_Item_Name"
+                class="col-sm-4 col-form-label col-form-label-sm">Level_4_Planning_Item_Name</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-sm" id="txt_add_Level_4_Planning_Item_Name">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="txt_add_Level_2_Planning_Item_Name"
+                class="col-sm-4 col-form-label col-form-label-sm">Level_2_Planning_Item_Name</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-sm" id="txt_add_Level_2_Planning_Item_Name">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="txt_add_Level_1_Planning_Item_Name"
+                class="col-sm-4 col-form-label col-form-label-sm">Level_1_Planning_Item_Name</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-sm" id="txt_add_Level_1_Planning_Item_Name">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="txt_add_Currency_cd" class="col-sm-4 col-form-label col-form-label-sm">Currency_cd</label>
+              <div class="col-sm-6">
+     
+                <select class="form-control form-control-sm" id="txt_add_Currency_cd">
+                  <option value="USD" selected>USD</option>
+                  <option value="INR" selected>INR</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="txt_add_Planning_Item_Type"
+                class="col-sm-4 col-form-label col-form-label-sm">Planning_Item_Type</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-sm" id="txt_add_Planning_Item_Type">
+              </div>
+            </div>
+
+           
+
+            <div class="form-group row">
+              <label for="txt_add_Plan_Start_Date" class="col-sm-4 col-form-label col-form-label-sm">Plan_Start_Date</label>
+              <div class="col-sm-6">
+                <input type="datetime-local" class="form-control form-control-sm" id="txt_add_Plan_Start_Date">
+              </div>
+            </div>
+
+
+            <div class="form-group row">
+              <label for="txt_add_Planning_Item_Number"
+                class="col-sm-4 col-form-label col-form-label-sm">Planning_Item_Number</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-sm" id="txt_add_Planning_Item_Number">
+              </div>
+            </div>
+
+
+
+            <div class="form-group row">
+              <label for="txt_add_Total_Invoiced" class="col-sm-4 col-form-label col-form-label-sm">Total_Invoiced</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-sm" id="txt_add_Total_Invoiced">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="txt_add_Hierarchy_Definition_ID"
+                class="col-sm-4 col-form-label col-form-label-sm">Hierarchy_Definition_ID</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-sm" id="txt_add_Hierarchy_Definition_ID">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="txt_add_Task_Phase" class="col-sm-4 col-form-label col-form-label-sm">Task_Phase</label>
+              <div class="col-sm-6">
+             
+                <select class="form-control form-control-sm" id="txt_add_Task_Phase">
+                  <option value="Design" selected>Design</option>
+                  <option value="Requirements Analysis" >Requirements Analysis</option>
+                  <option value="Development" >Development</option>
+                  <option value="Testing" >Testing</option>
+                  <option value="Deployed" >Deployed</option>                  
+                  <option value="Integration" >Integration</option>
+                  <option value="Operations" >Operations</option>
+                </select>
+              </div>
+            </div>            
+
+            <div class="form-group row">
+              <label for="txt_add_Planning_Level_Number"
+                class="col-sm-4 col-form-label col-form-label-sm">Planning_Level_Number</label>
+              <div class="col-sm-6">
+                <input type="number" class="form-control form-control-sm" id="txt_add_Planning_Level_Number">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="txt_add_Task_Cost" class="col-sm-4 col-form-label col-form-label-sm">Task_Cost</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-sm" id="txt_add_Task_Cost">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="txt_add_Hierarchy_Definition_Node_ID"
+                class="col-sm-4 col-form-label col-form-label-sm">Hierarchy_Definition_Node_ID</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-sm" id="txt_add_Hierarchy_Definition_Node_ID">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="txt_add_Total_Committed" class="col-sm-4 col-form-label col-form-label-sm">Total_Committed</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-sm" id="txt_add_Total_Committed">
+              </div>
+            </div>
+
+            
+
+            <div class="form-group row">
+              <label for="txt_add_Total_Expenses" class="col-sm-4 col-form-label col-form-label-sm">Total_Expenses</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-sm" id="txt_add_Total_Expenses">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="txt_add_Reserved_Budget" class="col-sm-4 col-form-label col-form-label-sm">Reserved_Budget</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-sm" id="txt_add_Reserved_Budget">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="txt_add_Task_Status" class="col-sm-4 col-form-label col-form-label-sm">Task_Status</label>
+              <div class="col-sm-6">
+                <select class="form-control form-control-sm" id="txt_add_Task_Status">
+                  <option value="Approved" selected>Approved</option>
+                  <option value="Pending" >Pending</option>
+                  <option value="Deployed" >Deployed</option>
+                  <option value="Delayed" >Delayed</option>
+                  <option value="Rejected" >Rejected</option>
+                </select>
+              </div>
+            </div>
+
+          
+
+            <div class="form-group row">
+              <label for="txt_add_Available_Budget"
+                class="col-sm-4 col-form-label col-form-label-sm">Available_Budget</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-sm" id="txt_add_Available_Budget">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="txt_add_Planning_Item_Description"
+                class="col-sm-4 col-form-label col-form-label-sm">Planning_Item_Description</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-sm" id="txt_add_Planning_Item_Description">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="txt_add_Total_Budget" class="col-sm-4 col-form-label col-form-label-sm">Total_Budget</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-sm" id="txt_add_Total_Budget">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="txt_add_Allocated_Budget"
+                class="col-sm-4 col-form-label col-form-label-sm">Allocated_Budget</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-sm" id="txt_add_Allocated_Budget">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="txt_add_Planning_Item_Path"
+                class="col-sm-4 col-form-label col-form-label-sm">Planning_Item_Path</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-sm" id="txt_add_Planning_Item_Path">
+              </div>
+            </div>
+
+          </form>
+
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="btn-save-node" class="btn btn-primary">Save changes</button>
+          <button type="button" id="btn-close" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="delete-modal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Warning</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Node will be deleted along with relationship.</p>
+        </div>
+        <div class="modal-footer">
+          <button id="btn-confirm-delete" type="button" class="btn btn-primary">Delete</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+ 
+
+   
+    <div class="container-fluid">
+    <div class="row d-flex justify-content-end">
+    
+      <button id="btn-add-node" class="btn btn-primary m-4">Add New Node</button>
+    </div>
+    <div id="google_translate_element"></div>
+    <script>
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement(
+                {pageLanguage: 'en'},
+                'google_translate_element'
+            );
+        }
+    </script>
+    <script src="http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    
+    <div class="row">
+      <main role="main" class="col-md-8 ml-sm-auto col-lg-8 pt-3 px-4">
+        <div class="
+              d-flex
+              justify-content-between
+              flex-wrap flex-md-nowrap
+              align-items-center
+              pb-2
+              mb-3
+              border-bottom
+            ">
+          <div class="btn-toolbar">
+            <div class="btn-group">
+              <button id="toolbar-expand-all" class="btn border" title="Expand all nodes">
+                <i class="fa fa-arrow-down"></i>
+              </button>
+              <button id="toolbar-collapse-all" class="btn border" title="collapse all nodes">
+                <i class="fa fa-arrow-up"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div id="container">
+          <div id="canvas"></div>
+        </div>
+      </main>
+      <nav class="col-md-4 d-none d-sm-block bg-light">
+        <div class="sticky-top sticky-offset">
+          <div class="px-1 py-3">
+            <div class="accordion" id="accordion-search">
+              <div class="card">
+                <div class="card-header collapsed" data-toggle="collapse" data-target="#collapse-search">
+                  <button class="btn btn-link" type="button">
+                    <h5 class="mb-0">Search</h5>
+                  </button>
+                </div>
+
+                <div id="collapse-search" class="collapse" data-parent="#accordion-search">
+                  <div class="card-body">
+                    <form id="search-form" class="d-flex">
+                      <input class="form-control me-2" type="text" id="search-input" placeholder="Search"
+                        aria-label="Search" />
+                      <button class="btn btn-outline-success" type="submit">
+                        Search
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr />
+            <div class="accordion" id="accordion-nodes">
+              <div class="card">
+                <div class="card-header collapsed" data-toggle="collapse" data-target="#collapse-nodes">
+                  <button class="btn btn-link" type="button">
+                    <h5 class="mb-0">Nodes</h5>
+                  </button>
+                </div>
+
+                <div id="collapse-nodes" class="collapse" data-parent="#accordion-nodes">
+                  <div class="card-body">
+                    <div id="node-types"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr />
+            <div class="accordion d-none" id="accordion-colors">
+              <div class="card">
+                <div class="card-header collapsed" data-toggle="collapse" data-target="#collapse-colors">
+                  <button class="btn btn-link" type="button">
+                    <h5 class="mb-0">Colors</h5>
+                  </button>
+                </div>
+
+                <div id="collapse-colors" class="collapse" data-parent="#accordion-colors">
+                  <div class="card-body">
+                    <ul id="node-colors" class="list-group"></ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr />
+            <div class="accordion" id="accordion-properties">
+              <div class="card">
+                <div class="card-header collapsed" data-toggle="collapse" data-target="#collapse-properties">
+                  <button class="btn btn-link" type="button">
+                    <h5 class="mb-0">Properties</h5>
+                  </button>
+
+                </div>
+                <div id="collapse-properties" class="collapse" data-parent="#accordion-properties">
+                  <div class="card-body">
+                    <table id="table-properties" class="table table-striped">
+                      <tbody>
+
+                      </tbody>
+                    </table>
+                    <div class="text-center">
+                      <button id="btn-save-property" class="btn btn-primary">Save</button>
+                      <button id="btn-delete-property" class="btn btn-danger">Delete</button>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              
+            </div>
+
+
+
+          </div>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"
+    integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF"
+    crossorigin="anonymous"></script>
+  <script src="./js/bootstrap-colorpicker.min.js"></script>
+  <script src="./dist/build.js"></script>
+</body>
+
+</html>
